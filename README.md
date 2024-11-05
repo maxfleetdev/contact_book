@@ -1,0 +1,1 @@
+A very (very) simple project I created in roughly an hour to experiment with new ideas (Vectors, References, Streams etc). It saves a contacts.txt when exiting the application. I wish to expand this to be able to load files and possibly merge.
