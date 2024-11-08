@@ -1,148 +1,118 @@
 #include <iostream>
-#include <vector>
 #include <string>
-#include <fstream>
+#include <vector>
+#include "Contact.h"
 
-/*
-> Add Contact
-> Search Contact
-> Delete Contact
+std::vector<Contact> allContacts;
+bool exitApp = false;
 
-	>> Struct for single contact (name & number) DONE
-	>> Vector to store contacts DONE
-	>> system("cls") for continuety ?? NO
-*/
-
-// Struct for single contact
-struct Contact {
-	std::string name = "";
-	std::string number = "";
-};
-
-// All contacts
-std::vector<Contact> ContactList{};
-
-// Function Declerations
-Contact GetContact();
-Contact FindContact(Contact& contact);
-bool DeleteNumber(Contact& contact);
-bool AddContact(Contact& contact);
+// Function Declarations
+void GetChoice();
+void AddContact();
+void EditContact();
+void FindContact();
+void ShowContacts();
+void ShowFavourites();
 void ExitApp();
+void ShowHelp();
+void NullCatch();
+void ClearScreen();
 
-
+// Main Loop
 int main() {
-	// Input Option (add, delete, search)
-	while (1) {
-		std::cout << "=================================================";
-		std::cout << "\n\nInput one option: add, delete, find or exit: ";
-		std::string option = {};
-		std::cin >> option;
+	while (!exitApp) {
+		GetChoice();
+	}
+	ExitApp();
+}
 
-		// Flush input stream
-		std::cin.ignore();			
+void GetChoice() {
+	std::cout << "================================================\n";
+	std::cout << "Input an option: \n(1) add \n(2) edit \n(3) find \n(4) favourites \n(5) exit \n(6) help \n\n";
+	int choice = {};
+	std::cin >> choice;
+	std::cin.ignore();
 
-		if (option.compare("add") == 0) {
-			Contact contact = GetContact();
-			AddContact(contact);
-		}
-		else if (option.compare("delete") == 0) {
-			// Get Number
-			std::cout << "Input number (e.g: 07123456789): ";
-			std::string number = {};
-			std::cin >> number;
-			
-			Contact contact = { "", number };
-			DeleteNumber(contact);
-		}
-		else if (option.compare("find") == 0) {
-			std::cout << "Input number (e.g: 07123456789): ";
-			std::string number = {};
-			std::cin >> number;
+	// Choice Option
+	switch (choice) {
+	case 1:
+		AddContact();
+		break;
+	case 2:
+		EditContact();
+		break;
+	case 3:
+		FindContact();
+		break;
+	case 4:
+		ShowFavourites();
+		break;
+	case 5:
+		ExitApp();
+		break;
+	case 6:
+		ShowHelp();
+		break;
 
-			Contact contact = { "", number };
-			FindContact(contact);
-		}
-		else if (option.compare("exit") == 0) {
-			ExitApp();
-			break;
-		}
-
-		// Default Option
-		else {
-			std::cout << "Option " << option << " does not exist!\n";
-		}
+	default:
+		NullCatch();
+		break;
 	}
 }
 
-Contact GetContact() {
-	// Get Name
-	std::cout << "Input name (e.g: John Doe): ";
-	std::string name;
+void AddContact() {
+	std::cout << std::flush;
+	std::cout << '\n' << "Insert Name: ";
+	std::string name = {};
 	std::getline(std::cin, name);
 
-	// Get Number
-	std::cout << "Input number (e.g: 07123456789): ";
-	std::string number = {};
+	std::cout << '\n' << "Insert Number: ";
+	int number = {};
 	std::cin >> number;
 
-	// Return Contact
-	return { name, number };
+	ClearScreen();
+	std::cout << "Added Contact " << name << '\n';
+	Contact contact = Contact{ name, number };
+	allContacts.push_back(contact);
 }
 
-
-
-bool AddContact(Contact& contact) {
-	// Check each contact
-	if (ContactList.size() > 0) {
-		for (int i = 0; i < ContactList.size(); i++) {
-			if (ContactList[i].number == contact.number) {
-				std::cout << "Contact with number " << contact.number << " already exists!\n";
-				return false;
-			}
-		}
-	}
-	// Add Contact
-	ContactList.push_back(contact);
-	std::cout << "Added Contact: " << contact.name << ", " << contact.number << "\n";
-	return true;
+void EditContact() {
+	// name
+	// number
+	// favourite
 }
 
-bool DeleteNumber(Contact& contact) {
-	// Check contact exists
-	if (ContactList.size() > 0) {
-		for (int i = 0; i < ContactList.size(); i++) {
-			if (ContactList[i].number == contact.number) {
-				std::cout << "Deleted numeber: " << contact.number << "\n";
-				ContactList.erase(ContactList.begin() + i);
-				return true;
-			}
-		}
-	}
-	// Unable to delete
-	std::cout << "Unable to delete number: " << contact.number << "\n";
-	return false;
+void FindContact() {
+	// name
+	// number
 }
 
-Contact FindContact(Contact& contact) {
-	if (ContactList.size() > 0) {
-		for (int i = 0; i < ContactList.size(); i++) {
-			if (ContactList[i].number == contact.number) {
-				std::cout << "Found contact: " << ContactList[i].name << ", " << ContactList[i].number << "\n";
-				return ContactList[i];
-			}
-		}
-	}
-	std::cout << "Unable to find contact: " << contact.number << "\n";
-	return {"", ""};
+void RemoveContact() {
+	// use name/number
+}
+
+void ShowFavourites() {
+	// show list
+}
+
+void ShowContacts() {
+	// display all contacts
 }
 
 void ExitApp() {
-	// save contacts to .txt file
-	std::ofstream file;
-	file.open("contacts.txt");
-	for (int i = 0; i < ContactList.size(); i++) {
-		file << ContactList[i].name << ", ";
-		file << ContactList[i].number << "\n";
-	}
-	file.close();
+	// save file using ofstream
+	std::cout << "Exiting :3";
+}
+
+void ShowHelp() {
+
+}
+
+void NullCatch() {
+	ClearScreen();
+	std::cout << "No Option Found. Please enter a valid option. \n\n";
+}
+
+void ClearScreen() {
+	system("cls");
 }
